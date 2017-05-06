@@ -1,100 +1,53 @@
-<?php
-session_start();
-
-$_SESSION["pancakeId"] = 0;
-$_SESSION["pancakePrice"] = 0;
-$_SESSION["fillingId"] = 0;
-$_SESSION["fillingsPrice"] = 0;
-$_SESSION["totalPrice"] = 0;
-
-$mysqli = new mysqli("localhost", "root", "", "pancakesdb");
-$mysqli->query("SET NAMES 'utf8'"); 
-$set = $mysqli->query("SELECT `id`, `name`, `price` FROM `pancakes`");
-$fillings = $mysqli->query("SELECT `id`, `name`, `price` FROM `fillings`");
-
-$maxId = $mysqli->query("SELECT MAX(`id`) FROM `fillings`")->fetch_assoc();
-$minId = $mysqli->query("SELECT MIN(`id`) FROM `fillings`")->fetch_assoc();
-$minId = $minId["MIN(`id`)"];
-$maxId = $maxId["MAX(`id`)"];
-$isFillingChosen = array_fill($minId, $maxId - $minId + 1, false);
-$_SESSION['fillingsChosen'] = $isFillingChosen;
-?>
+<?php require("requires/mainPageGen.php"); ?>
 
 <html>
 <head>
-
-<link rel="stylesheet" href="style.css">
-<!--<script src="https://ajax.googleapis.com/ajax/libs/jquery/3.1.1/jquery.min.js"></script>-->
-<script src="jquery-3.1.1.min.js"></script>
-<script>
-	function choosePancake() {
-		$.ajax({
-			url: "choosePancake.php",
-			data: {
-				"pancakeId": $(this).attr('id')
-			},
-			type: 'GET',
-			success: function(data) {
-				var sent = JSON.parse(data);
-				$('#' + sent['id']).siblings().removeClass("chosen");
-				$('#' + sent['id']).addClass("chosen");
-				$("#temp").html(sent["price"] + " BYN");
-				$("#total").html(sent["total"] + " BYN");
-			}
-		})
-	}
+	<!--<script src="https://ajax.googleapis.com/ajax/libs/jquery/3.1.1/jquery.min.js"></script>-->
+	<script src="src/jquery-3.1.1.min.js"></script>
+	<script src="src/mainPageScript.js"></script>
 	
-	function chooseFilling() {
-		$.ajax({
-			url: "chooseFilling.php",
-			data: {
-				"fillingId": $(this).attr('id').substr(1)
-			},
-			type: 'GET',
-			success: function(data) {
-				var sent = JSON.parse(data);
-				$('#f' + sent['id']).toggleClass("chosen");
-				$("#tempF").html(sent["price"] + " BYN");
-				$("#total").html(sent["total"] + " BYN");
-			}
-		})
-	}
-	
-	$(document).ready(function () {
-            $('.pancake').bind('click', choosePancake);
-			$('.filling').bind('click', chooseFilling);
-        })
-</script>
+	<link rel="stylesheet" href="Styles/bootstrap.min.css">
+	<link rel="stylesheet" href="Styles/MainPageStyle.css">
 </head>
 <body>
 
-<h1>Добро пожаловать на Pancakes Order!</h1>
-<table id="pancakeTable">
-<tr><th>Название</th><th>Цена</th></tr>
-<?php
-while ($row = $set->fetch_assoc()) {
-	echo "<tr id=".$row["id"]." class=\"pancake\"><td>".$row["name"]."</td><td>".$row["price"]." BYN</td></tr>";
-}
-?>
-</table>
-<br>
-Цена: <span id="temp"></span>
-<br>
-<br>
-
-<table id="fillingTable">
-<tr><th>Название</th><th>Цена</th></tr>
-<?php
-while ($row = $fillings->fetch_assoc()) {
-	echo "<tr id='f".$row["id"]."' class=\"filling\"><td>".$row["name"]."</td><td>".$row["price"]." BYN</td></tr>";
-}
-?>
-</table>
-<br>
-Цена: <span id="tempF"></span>
-<br>
-<br>
-Общая стоимость: <span id="total"></span>
+<div id="main-div">
+	<?php include("Templates/header.php");?>
+	
+	<div id="main-content-div">
+		<h2>Закажите блин в 2 простых шага:</h2><br>
+		
+		<label>1. Выберите блин:</label>
+		<div class="for-table">
+			<?php showPancakesTable(); ?>
+			
+			<span class="for-price">Цена: <span id="temp"></span></span><br>
+			<span id='chooseErr' class='err' ></span>
+		</div>
+		
+		<label>2. Выберите начинки:</label>
+		<div class="for-table">
+			<?php showFillingsTable(); ?>
+		
+			<span class="for-price"> Цена: <span id="tempF"></span></span>
+		</div>	
+	</div>
+	
+	<div class="order-wrap">
+		<label>Ваш заказ:</label>
+		<div class="order">
+			<span class="for-menu-price">Общая стоимость: <span id="total"></span></span>
+			<br>
+			<h6>Введите ваш пароль:</h6>
+			<input id="code" type="text" placeholder="Пароль"><br>
+			<span id='passErr' class='err' ></span>
+			<br><br>
+			<button id="orderBtn" class="btn  btn-primary" >Заказать</button> 
+		</div>
+	</div>
+	
+	<?php include("Templates/footer.php");?>
+</div>
 
 </body>
 </html>

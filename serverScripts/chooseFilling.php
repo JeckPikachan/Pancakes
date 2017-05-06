@@ -20,7 +20,8 @@ if ($_SESSION["fillingsChosen"][$id]) {
 	$_SESSION["fillingsPrice"] += $price;
 }
 
-$_SESSION["totalPrice"] = $_SESSION["pancakePrice"] + $_SESSION["fillingsPrice"];
+$_SESSION["totalPrice"] = $_SESSION["pancakePrice"] + $_SESSION["fillingsPrice"] + $_SESSION["envelopePrice"];
 
 $arr = array('price' => $_SESSION["fillingsPrice"], 'id' => $id, 'total' => $_SESSION["totalPrice"]);
+$mysqli->close();
 echo json_encode($arr);

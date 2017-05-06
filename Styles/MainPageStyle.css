@@ -1,0 +1,66 @@
+html {
+	height: 100%;
+}
+
+.chosen{
+	color: rgba(0, 160, 0, 0.55);
+}
+
+.err {
+	color: rgba(200, 0, 0, 1);
+	font-size: 12px;
+}
+
+.pancake {
+	cursor: pointer;
+}
+
+.filling {
+	cursor: pointer;
+}
+
+#main-content-div {
+	width: 50%;
+	margin-left: 15%;
+	padding-top: 20px;
+	padding-bottom: 120px;
+}
+
+#main-div {
+	position: relative;
+	min-height: 100%;
+}
+
+.for-table {
+	border: 1px solid #CCCCCC;
+	border-radius: 5px;
+	padding: 20px 25px 15px 25px;
+	margin-bottom: 25px;
+}
+
+.for-price {
+	font-size: 18pt;
+}
+
+.for-menu-price {
+	font-size: 14pt;
+}
+
+.order {
+	width:100%;
+	border: 1px solid #CCCCCC;
+	padding: 30px 20px 20px 20px;
+	border-radius: 2px;
+}
+
+.order-wrap {
+	position: fixed;
+	left: 70%;
+	top: 130px;
+	width: 21%;
+}
+
+#orderBtn {
+	width: 100px;
+	margin-left: 33%;
+}
